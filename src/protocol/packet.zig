@@ -71,6 +71,7 @@ pub const PropertyId = enum(u8) {
 pub const FixedHeader = packed struct {
     packet_type: PacketType,
     flags: u4,
+    remaining_length: u32,
 
     pub fn parse(byte: u8) PacketError!FixedHeader {
         const packet_type = PacketType.from_byte(byte);
@@ -94,7 +95,11 @@ pub const FixedHeader = packed struct {
             },
         }
 
-        return FixedHeader{ .packet_type = packet_type, .flags = flags };
+        return FixedHeader{
+            .packet_type = packet_type,
+            .flags = flags,
+            .remaining_length = 0,
+        };
     }
 };
 
